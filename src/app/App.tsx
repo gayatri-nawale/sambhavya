@@ -1,18 +1,58 @@
-import { Suspense, lazy } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Suspense, lazy, useEffect } from 'react';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { PublicLayout } from '../components/layout/PublicLayout';
+import Home from '../pages/Home';
+import HowItWorks from '../pages/HowItWorks';
+import Science from '../pages/Science';
+import NotFound from '../pages/NotFound';
+
+// The console pulls in the simulation engine and world map, so it loads on demand.
+const ConsoleLayout = lazy(() => import('../components/layout/ConsoleLayout').then((m) => ({ default: m.ConsoleLayout })));
+const ConsolePlaceholder = lazy(() => import('../pages/console/ConsolePlaceholder'));
 
 // Dev-only pages are dropped from production builds.
 const SimCheckPage = import.meta.env.DEV ? lazy(() => import('../pages/dev/SimCheckPage')) : null;
 const KitPage = import.meta.env.DEV ? lazy(() => import('../pages/dev/KitPage')) : null;
 
+/** Scroll to the top on page change, or to the #hash target when there is one. */
+function ScrollManager() {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      document.getElementById(hash.slice(1))?.scrollIntoView();
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [pathname, hash]);
+  return null;
+}
+
 export function App() {
   return (
     <BrowserRouter>
+      <ScrollManager />
       <Suspense fallback={null}>
         <Routes>
-          {SimCheckPage && <Route path="/_sim" element={<SimCheckPage />} />}
-          {KitPage && <Route path="/_kit" element={<KitPage />} />}
-          <Route path="*" element={null} />
+          <Route element={<PublicLayout />}>
+            <Route index element={<Home />} />
+            <Route path="how-it-works" element={<HowItWorks />} />
+            <Route path="science" element={<Science />} />
+          </Route>
+          <Route path="console" element={<ConsoleLayout />}>
+            <Route index element={<Navigate to="run" replace />} />
+            <Route path="run" element={<ConsolePlaceholder id="run" />} />
+            <Route path="tracker" element={<ConsolePlaceholder id="tracker" />} />
+            <Route path="sharpen" element={<ConsolePlaceholder id="sharpen" />} />
+            <Route path="calibration" element={<ConsolePlaceholder id="calibration" />} />
+            <Route path="alerts" element={<ConsolePlaceholder id="alerts" />} />
+            <Route path="verify" element={<ConsolePlaceholder id="verify" />} />
+            <Route path="sources" element={<ConsolePlaceholder id="sources" />} />
+          </Route>
+          {SimCheckPage && <Route path="_sim" element={<SimCheckPage />} />}
+          {KitPage && <Route path="_kit" element={<KitPage />} />}
+          <Route element={<PublicLayout />}>
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
       </Suspense>
     </BrowserRouter>

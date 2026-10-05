@@ -1,4 +1,79 @@
 @import "tailwindcss";
+@import "./tokens.css";
+
+/* Tokens exposed to Tailwind: bg-ink, text-teal, border-line, font-head, rounded-chip, text-h1 … */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-bay: var(--bay);
+  --color-mist: var(--mist);
+  --color-paper: var(--paper);
+  --color-teal: var(--teal);
+  --color-line: var(--line);
+  --color-warn-low: var(--warn-low);
+  --color-warn-mod: var(--warn-mod);
+  --color-warn-sev: var(--warn-sev);
+
+  --font-sans: var(--family-body);
+  --font-head: var(--family-head);
+
+  --radius-chip: var(--chip-radius);
+  --radius-panel: var(--panel-radius);
+
+  /* Type scale: 14 / 16 / 20 / 28 / 40 / 64 px */
+  --text-small: 14px;
+  --text-small--line-height: 1.5;
+  --text-body: 16px;
+  --text-body--line-height: 1.55;
+  --text-lead: 20px;
+  --text-lead--line-height: 1.45;
+  --text-h3: 28px;
+  --text-h3--line-height: 1.15;
+  --text-h2: 40px;
+  --text-h2--line-height: 1.05;
+  --text-h1: 64px;
+  --text-h1--line-height: 1.05;
+}
+
+@layer base {
+  html {
+    background: var(--mist);
+    color: var(--ink);
+    font-family: var(--family-body);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--family-head);
+    font-weight: 700;
+    line-height: 1.05;
+  }
+  :focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+}
+
+/* Data is always tabular. */
+.tabular,
+table,
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reduced motion: show end states instantly. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 /* Lead-time slider: thin track filled in --teal up to the thumb (fill set inline). */
 .lead-slider {
@@ -12,17 +87,17 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid #1f8a84;
+  background: var(--paper);
+  border: 2px solid var(--teal);
 }
 .lead-slider::-moz-range-thumb {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid #1f8a84;
+  background: var(--paper);
+  border: 2px solid var(--teal);
 }
 .lead-slider:focus-visible {
-  outline: 2px solid #14213d;
+  outline: 2px solid var(--ink);
   outline-offset: 6px;
 }

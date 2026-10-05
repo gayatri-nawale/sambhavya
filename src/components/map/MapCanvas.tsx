@@ -83,7 +83,15 @@ export interface MapCanvasProps {
   interactive?: boolean;
   /** Legend or other overlay content, placed bottom-left. */
   legend?: ReactNode;
+  /** Custom SVG content drawn above the built-in layers, using the map's projection. */
+  overlay?: (api: MapOverlayApi) => ReactNode;
   className?: string;
+}
+
+export interface MapOverlayApi {
+  toScreen: (p: LatLon) => [number, number] | null;
+  width: number;
+  height: number;
 }
 
 interface View {
@@ -218,6 +226,7 @@ export function MapCanvas(props: MapCanvasProps) {
     markers,
     interactive = true,
     legend,
+    overlay,
     className,
   } = props;
 
@@ -617,6 +626,11 @@ export function MapCanvas(props: MapCanvasProps) {
               {l.text}
             </text>
           ))}
+        </svg>
+      )}
+      {proj && overlay && (
+        <svg width={size.w} height={size.h} className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          {overlay({ toScreen, width: size.w, height: size.h })}
         </svg>
       )}
       {interactive && (
