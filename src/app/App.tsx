@@ -9,6 +9,7 @@ import NotFound from '../pages/NotFound';
 // The console pulls in the simulation engine and world map, so it loads on demand.
 const ConsoleLayout = lazy(() => import('../components/layout/ConsoleLayout').then((m) => ({ default: m.ConsoleLayout })));
 const ConsolePlaceholder = lazy(() => import('../pages/console/ConsolePlaceholder'));
+const ForecastRun = lazy(() => import('../pages/console/ForecastRun'));
 
 // Dev-only pages are dropped from production builds.
 const SimCheckPage = import.meta.env.DEV ? lazy(() => import('../pages/dev/SimCheckPage')) : null;
@@ -40,7 +41,7 @@ export function App() {
           </Route>
           <Route path="console" element={<ConsoleLayout />}>
             <Route index element={<Navigate to="run" replace />} />
-            <Route path="run" element={<ConsolePlaceholder id="run" />} />
+            <Route path="run" element={<ForecastRun />} />
             <Route path="tracker" element={<ConsolePlaceholder id="tracker" />} />
             <Route path="sharpen" element={<ConsolePlaceholder id="sharpen" />} />
             <Route path="calibration" element={<ConsolePlaceholder id="calibration" />} />

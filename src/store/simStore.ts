@@ -80,6 +80,8 @@ export interface SimState {
   resetRun: () => void;
   setRunSpeed: (speed: RunSpeed) => void;
   tick: (dtMs: number) => void;
+  /** Jump to a point in the run and pause there (guided demo, screenshots). */
+  seekRun: (elapsedMs: number) => void;
 
   setLeadH: (leadH: number) => void;
   setLeadPlaying: (playing: boolean) => void;
@@ -166,6 +168,12 @@ export const useSimStore = create<SimState>()((set, get) => {
     resetRun: () => dispatch({ type: 'reset' }),
     setRunSpeed: (speed) => dispatch({ type: 'setSpeed', speed }),
     tick: (dtMs) => dispatch({ type: 'tick', dtMs }),
+    seekRun: (elapsedMs) =>
+      set((s) => {
+        const total = getPipelinePlan(s.scenarioId).totalMs;
+        const e = Math.max(0, Math.min(total, elapsedMs));
+        return { run: { ...s.run, elapsedMs: e, status: e >= total ? 'done' : 'paused' } };
+      }),
 
     setLeadH: (leadH) => set({ leadH: Math.max(0, Math.min(240, Math.round(leadH / 6) * 6)) }),
     setLeadPlaying: (leadPlaying) => set({ leadPlaying }),

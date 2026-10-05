@@ -74,6 +74,8 @@ export interface PipelinePlan {
   chunkCount: number;
   variables: number;
   efiMax: number;
+  /** Lead time (h) of the EFI maximum. */
+  efiLeadH: number;
   candidateCount: number;
   calibrationExample: { raw: number; calibrated: number; leadH: number };
   patches: PatchJob[];
@@ -263,6 +265,7 @@ export function getPipelinePlan(scenarioId: ScenarioId): PipelinePlan {
     chunkCount,
     variables: VARIABLES.length,
     efiMax,
+    efiLeadH: efiLead,
     candidateCount: scr.candidates.length,
     calibrationExample,
     patches,
