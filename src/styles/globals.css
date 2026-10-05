@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+/* Lead-time slider: thin track filled in --teal up to the thumb (fill set inline). */
+.lead-slider {
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.lead-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #1f8a84;
+}
+.lead-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #1f8a84;
+}
+.lead-slider:focus-visible {
+  outline: 2px solid #14213d;
+  outline-offset: 6px;
+}

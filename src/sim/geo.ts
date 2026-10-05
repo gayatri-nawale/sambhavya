@@ -355,12 +355,21 @@ function isTopology(value: unknown): value is Topology {
   return typeof value === 'object' && value !== null && (value as { type?: unknown }).type === 'Topology';
 }
 
-function surfaceMask(): SurfaceMask {
-  if (maskCache) return maskCache;
+let worldCache: { topology: Topology; countries: GeometryCollection } | undefined;
+
+/** The bundled Natural Earth 50m countries topology, parsed once (no network). */
+export function getWorldTopology(): { topology: Topology; countries: GeometryCollection } {
+  if (worldCache) return worldCache;
   const parsed: unknown = JSON.parse(countriesRaw);
   if (!isTopology(parsed)) throw new Error('world-atlas data is not a TopoJSON topology');
-  const countries = parsed.objects['countries'] as GeometryCollection;
-  const fc = feature(parsed, countries);
+  worldCache = { topology: parsed, countries: parsed.objects['countries'] as GeometryCollection };
+  return worldCache;
+}
+
+function surfaceMask(): SurfaceMask {
+  if (maskCache) return maskCache;
+  const { topology, countries } = getWorldTopology();
+  const fc = feature(topology, countries);
   const grid = makeGrid(MASK_BBOX, MASK_RES);
   const cells = new Uint8Array(grid.nx * grid.ny);
   for (const f of fc.features) {
