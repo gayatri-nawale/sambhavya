@@ -261,13 +261,13 @@ export function downscale(
     } else {
       // Diffusion sample: full-detail residual with sample-specific texture.
       const seed = hashString(`${scenario.seed}/diffusion/${boxId}/${member}/${sample}`);
-      const scale = kind === 'rain' ? 0.12 : 0.35;
+      const scale = kind === 'rain' ? 0.06 : 0.3;
       values = new Float32Array(up.length);
       for (let j = 0; j < n; j++)
         for (let i = 0; i < n; i++) {
           const k = j * n + i;
           const texture = fbm(i / 9, j / 9, seed, 3) - 0.5;
-          const jitter = 1 + 0.5 * texture;
+          const jitter = 1 + 0.4 * texture;
           const base = (up[k] as number) + (residual[k] as number) * jitter;
           const extra = kind === 'rain' ? scale * Math.abs(base) * texture : scale * texture;
           values[k] = base + extra;
@@ -285,8 +285,9 @@ export function downscale(
       if (failing) {
         // A hallucinated storm cell far from the real core, added after the constraint layer.
         const peak = maxOf(values);
-        const ci = Math.round(n * 0.22);
-        const cj = Math.round(n * 0.78);
+        // Placed in the right half of the box, where the split view shows the output.
+        const ci = Math.round(n * 0.78);
+        const cj = Math.round(n * 0.3);
         const amp = kind === 'rain' ? peak * 0.9 : 4.5;
         for (let j = 0; j < n; j++)
           for (let i = 0; i < n; i++) {
