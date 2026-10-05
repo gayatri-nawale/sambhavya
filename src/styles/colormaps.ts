@@ -1,6 +1,6 @@
 /**
  * Colormaps from docs/PROTOTYPE_SPEC.md Part 2, as TS arrays for canvas rendering.
- * Prompt 1 mirrors these in tokens.css.
+ * Mirrored as CSS variables in tokens.css.
  */
 
 export type RGBA = [number, number, number, number];
@@ -29,8 +29,8 @@ export const DIVERGING_STOPS: readonly ColorStop[] = [
   { at: 1, color: '#B2182B' },
 ];
 
-/** Risk colours, used only for risk. */
-export const RISK_COLORS = { low: '#F2C230', moderate: '#EF8A24', severe: '#D62839' } as const;
+/** Risk colours, used only for risk (defined in tokens.ts). */
+export { RISK_COLORS } from './tokens';
 
 function hexToRgb(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16);

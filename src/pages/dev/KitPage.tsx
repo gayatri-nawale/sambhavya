@@ -29,35 +29,15 @@ import {
   type TrackPoint,
 } from '../../sim';
 import { useSimStore } from '../../store';
-import { DIVERGING_STOPS, RAIN_STOPS, RISK_COLORS, divergingColor, rainColor } from '../../styles/colormaps';
+import { ReplayChip, ToggleButton } from '../../components/ui';
+import { KitComponents } from './KitComponents';
+import { DIVERGING_STOPS, RAIN_STOPS, RISK_COLORS, rainColor } from '../../styles/colormaps';
+import { fieldColormap } from '../../components/map';
 
 const SCENARIO_ID = 'cyclone' as const;
 const PLACE_NAMES = ['Digha', 'Kolkata', 'Sundarbans', 'Hatiya', 'Paradip', 'Visakhapatnam', 'Sohra'];
 
 type FieldMode = 'rain' | 'efi' | 'off';
-
-function ReplayChip() {
-  return (
-    <span className="inline-block rounded-[4px] border border-[#C9D3DE] bg-white px-2 py-0.5 text-[13px] text-[#14213D]">
-      Replay · illustrative values
-    </span>
-  );
-}
-
-function Toggle({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={on}
-      onClick={onClick}
-      className={`rounded-[4px] border px-2.5 py-1 text-[14px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#14213D] ${
-        on ? 'border-[#1F8A84] bg-[#1F8A84] text-white' : 'border-[#C9D3DE] bg-white text-[#14213D]'
-      }`}
-    >
-      {children}
-    </button>
-  );
-}
 
 function TrackerDemo() {
   const scenario = SCENARIOS[SCENARIO_ID];
@@ -82,7 +62,7 @@ function TrackerDemo() {
     if (fieldMode === 'rain')
       return { field: regionField(SCENARIO_ID, leadH), colormap: rainColor, cacheKey: `${SCENARIO_ID}|rain|${leadH}`, opacity: 0.85 };
     if (fieldMode === 'efi')
-      return { field: efiField(SCENARIO_ID, leadH), colormap: (v: number) => divergingColor(v), cacheKey: `${SCENARIO_ID}|efi|${leadH}`, opacity: 0.7 };
+      return { field: efiField(SCENARIO_ID, leadH), colormap: fieldColormap('efi'), cacheKey: `${SCENARIO_ID}|efi|${leadH}`, opacity: 0.7 };
     return null;
   }, [fieldMode, leadH]);
 
@@ -156,50 +136,50 @@ function TrackerDemo() {
   );
 
   return (
-    <section className="rounded-[8px] border border-[#C9D3DE] bg-white">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#C9D3DE] px-4 py-3">
+    <section className="rounded-panel border border-line bg-paper">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
         <div>
-          <h2 className="text-[20px] font-semibold">MapCanvas · {scenario.name}</h2>
-          <p className="text-[14px]">{scenario.run.label} · drag to pan, scroll or use + / − to zoom, click a scenario path to highlight its members</p>
+          <h2 className="text-lead font-semibold">MapCanvas · {scenario.name}</h2>
+          <p className="text-small">{scenario.run.label} · drag to pan, scroll or use + / − to zoom, click a scenario path to highlight its members</p>
         </div>
         <ReplayChip />
       </div>
-      <div className="flex flex-wrap gap-2 border-b border-[#C9D3DE] px-4 py-3" role="group" aria-label="Map layers">
-        <Toggle on={fieldMode === 'rain'} onClick={() => setFieldMode('rain')}>
+      <div className="flex flex-wrap gap-2 border-b border-line px-4 py-3" role="group" aria-label="Map layers">
+        <ToggleButton pressed={fieldMode === 'rain'} onClick={() => setFieldMode('rain')}>
           Rain field
-        </Toggle>
-        <Toggle on={fieldMode === 'efi'} onClick={() => setFieldMode('efi')}>
+        </ToggleButton>
+        <ToggleButton pressed={fieldMode === 'efi'} onClick={() => setFieldMode('efi')}>
           EFI field
-        </Toggle>
-        <Toggle on={fieldMode === 'off'} onClick={() => setFieldMode('off')}>
+        </ToggleButton>
+        <ToggleButton pressed={fieldMode === 'off'} onClick={() => setFieldMode('off')}>
           No field
-        </Toggle>
-        <span className="mx-1 w-px self-stretch bg-[#C9D3DE]" aria-hidden="true" />
-        <Toggle on={layers.members} onClick={() => flip('members')}>
+        </ToggleButton>
+        <span className="mx-1 w-px self-stretch bg-line" aria-hidden="true" />
+        <ToggleButton pressed={layers.members} onClick={() => flip('members')}>
           Member tracks
-        </Toggle>
-        <Toggle on={layers.paths} onClick={() => flip('paths')}>
+        </ToggleButton>
+        <ToggleButton pressed={layers.paths} onClick={() => flip('paths')}>
           Scenarios
-        </Toggle>
-        <Toggle on={layers.cone} onClick={() => flip('cone')}>
+        </ToggleButton>
+        <ToggleButton pressed={layers.cone} onClick={() => flip('cone')}>
           Probability cone
-        </Toggle>
-        <Toggle on={layers.box} onClick={() => flip('box')}>
+        </ToggleButton>
+        <ToggleButton pressed={layers.box} onClick={() => flip('box')}>
           4D box
-        </Toggle>
-        <Toggle on={layers.zones} onClick={() => flip('zones')}>
+        </ToggleButton>
+        <ToggleButton pressed={layers.zones} onClick={() => flip('zones')}>
           Risk zones
-        </Toggle>
-        <Toggle on={layers.places} onClick={() => flip('places')}>
+        </ToggleButton>
+        <ToggleButton pressed={layers.places} onClick={() => flip('places')}>
           Places
-        </Toggle>
-        <span className="mx-1 w-px self-stretch bg-[#C9D3DE]" aria-hidden="true" />
-        <Toggle on={projection === 'equirectangular'} onClick={() => setProjection('equirectangular')}>
+        </ToggleButton>
+        <span className="mx-1 w-px self-stretch bg-line" aria-hidden="true" />
+        <ToggleButton pressed={projection === 'equirectangular'} onClick={() => setProjection('equirectangular')}>
           Equirectangular
-        </Toggle>
-        <Toggle on={projection === 'mercator'} onClick={() => setProjection('mercator')}>
+        </ToggleButton>
+        <ToggleButton pressed={projection === 'mercator'} onClick={() => setProjection('mercator')}>
           Mercator
-        </Toggle>
+        </ToggleButton>
       </div>
       <MapCanvas
         bbox={region}
@@ -215,7 +195,7 @@ function TrackerDemo() {
         legend={legend}
         className="h-[420px] md:h-[560px]"
       />
-      <div className="border-t border-[#C9D3DE] px-4 py-3">
+      <div className="border-t border-line px-4 py-3">
         <LeadTimeSlider
           value={leadH}
           onChange={setLeadH}
@@ -223,7 +203,7 @@ function TrackerDemo() {
           onPlayingChange={setPlaying}
           formatValid={(h) => formatUtc(validTime(scenario, h))}
         />
-        <p className="mt-2 text-[13px] tabular-nums">
+        <p className="mt-2 text-small tabular-nums">
           Risk zones are valid for T+96 to T+132 h windows · the 4D box ends with the tracks at T+144 h
         </p>
       </div>
@@ -245,16 +225,16 @@ function ZoneDemo() {
   if (severe) markers.push({ id: 'core', lat: severe.core.lat, lon: severe.core.lon, kind: 'core', label: 'Severe core' });
 
   return (
-    <section className="rounded-[8px] border border-[#C9D3DE] bg-white">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#C9D3DE] px-4 py-3">
+    <section className="rounded-panel border border-line bg-paper">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
         <div>
-          <h2 className="text-[20px] font-semibold">Risk zones · {box.label}</h2>
-          <p className="text-[14px]">5 km diffusion output with Low / Moderate / Severe zones; the Severe alert's area is outlined</p>
+          <h2 className="text-lead font-semibold">Risk zones · {box.label}</h2>
+          <p className="text-small">5 km diffusion output with Low / Moderate / Severe zones; the Severe alert's area is outlined</p>
         </div>
         <div className="flex items-center gap-2">
-          <Toggle on={showField} onClick={() => setShowField((v) => !v)}>
+          <ToggleButton pressed={showField} onClick={() => setShowField((v) => !v)}>
             5 km rain field
-          </Toggle>
+          </ToggleButton>
           <ReplayChip />
         </div>
       </div>
@@ -282,17 +262,21 @@ function ZoneDemo() {
   );
 }
 
-/** Dev-only component kit (/_kit). Map components for now; UI components join with the design system. */
+/** Dev-only component kit (/_kit): design-system components, then the map components. */
 export default function KitPage() {
   return (
-    <div className="min-h-screen bg-[#EEF2F6] px-4 py-6 text-[#14213D]">
-      <div className="mx-auto max-w-[1200px] space-y-4">
+    <div className="min-h-screen bg-mist px-4 py-8 text-ink sm:px-6">
+      <div className="mx-auto max-w-[1200px] space-y-10">
         <header>
-          <h1 className="text-[28px] font-bold leading-tight">Component kit</h1>
-          <p className="text-[14px]">Dev-only page. Map, legend and lead-time slider, demonstrated with the cyclone replay.</p>
+          <h1 className="text-h2">Component kit</h1>
+          <p className="mt-2 max-w-[70ch] text-body">Dev-only page. Every design-system component in all its states, then the map components with the cyclone replay.</p>
         </header>
-        <TrackerDemo />
-        <ZoneDemo />
+        <KitComponents />
+        <section className="space-y-4 border-t border-line pt-6">
+          <h2 className="text-h3">Map</h2>
+          <TrackerDemo />
+          <ZoneDemo />
+        </section>
       </div>
     </div>
   );

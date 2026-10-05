@@ -1,12 +1,7 @@
-/** Map colours, all taken from the spec tokens (docs/PROTOTYPE_SPEC.md Part 2). */
-export const MAP_COLORS = {
-  ink: '#14213D',
-  bay: '#0F4C75',
-  mist: '#EEF2F6',
-  paper: '#FFFFFF',
-  teal: '#1F8A84',
-  line: '#C9D3DE',
-} as const;
+import { COLORS } from '../../styles/tokens';
+
+/** Map colours: the spec tokens. */
+export const MAP_COLORS = COLORS;
 
 /** Sea is a light wash of --bay so tracks and labels stay readable on top of it. */
 export const SEA_ALPHA = 0.14;

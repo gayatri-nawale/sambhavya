@@ -62,7 +62,7 @@ export function Legend({ title, ramp, items, className }: LegendProps) {
   const last = ramp?.stops[ramp.stops.length - 1];
   const span = first && last ? last.at - first.at || 1 : 1;
   return (
-    <div className={`rounded-[8px] border border-[#C9D3DE] bg-white/95 px-3 py-2 text-[13px] text-[#14213D] ${className ?? ''}`}>
+    <div className={`rounded-[8px] border border-line bg-paper/95 px-3 py-2 text-small text-ink ${className ?? ''}`}>
       {title && <p className="mb-1 font-semibold">{title}</p>}
       {ramp && first && (
         <div className="mb-2 w-[220px] max-w-full">
@@ -70,12 +70,12 @@ export function Legend({ title, ramp, items, className }: LegendProps) {
             {ramp.title}
             {ramp.units ? ` (${ramp.units})` : ''}
           </p>
-          <div className="h-2.5 rounded-[2px] border border-[#C9D3DE]" style={{ background: rampGradient(ramp.stops) }} />
+          <div className="h-2.5 rounded-[2px] border border-line" style={{ background: rampGradient(ramp.stops) }} />
           <div className="relative mt-0.5 h-4 tabular-nums">
             {ramp.ticks.map((t) => (
               <span
                 key={t}
-                className="absolute -translate-x-1/2 text-[12px]"
+                className="absolute -translate-x-1/2 text-small"
                 style={{ left: `${Math.min(100, Math.max(0, ((t - first.at) / span) * 100))}%` }}
               >
                 {t}

@@ -1,18 +1,43 @@
-/* Design tokens from docs/PROTOTYPE_SPEC.md Part 2. Do not add colours here. */
+/* Design tokens from docs/PROTOTYPE_SPEC.md Part 2. Mirrored in tokens.ts. Do not add colours here. */
 :root {
+  /* Colour */
   --ink: #14213d;
   --bay: #0f4c75;
   --mist: #eef2f6;
   --paper: #ffffff;
   --teal: #1f8a84;
   --line: #c9d3de;
+  /* Risk only: Low / Moderate / Severe (IMD yellow / orange / red logic) */
   --warn-low: #f2c230;
   --warn-mod: #ef8a24;
   --warn-sev: #d62839;
 
+  /* Rain colormap, mm/day: transparent → … → #C51B8A */
+  --rain-0: transparent;
+  --rain-1: #c6e2f5;
+  --rain-2: #6baed6;
+  --rain-3: #2171b5;
+  --rain-4: #6a51a3;
+  --rain-5: #c51b8a;
+
+  /* Temperature / anomaly, diverging */
+  --anom-cold: #2166ac;
+  --anom-mid: #f7f7f7;
+  --anom-hot: #b2182b;
+
+  /* Type */
   --family-body: 'IBM Plex Sans', system-ui, sans-serif;
   --family-head: 'IBM Plex Sans Condensed', 'IBM Plex Sans', system-ui, sans-serif;
+  --size-14: 14px;
+  --size-16: 16px;
+  --size-20: 20px;
+  --size-28: 28px;
+  --size-40: 40px;
+  --size-64: 64px;
+  --leading-body: 1.55;
+  --leading-head: 1.05;
 
+  /* Radius by hierarchy: chips and inputs, panels; full-bleed maps use 0 */
   --chip-radius: 4px;
   --panel-radius: 8px;
 }
