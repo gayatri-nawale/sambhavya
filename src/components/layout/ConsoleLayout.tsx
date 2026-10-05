@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useEffect, useId } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { Activity, ClipboardCheck, Database, Gauge, Grid3x3, PlayCircle, Radar, ShieldAlert, type LucideIcon } from 'lucide-react';
 import { SCENARIOS, SCENARIO_IDS, formatUtc, stableWarnings, type ScenarioId } from '../../sim';
@@ -83,6 +83,14 @@ function barLink({ isActive }: { isActive: boolean }): string {
 
 export function ConsoleLayout() {
   const startTour = useStartTour();
+  const setScenario = useSimStore((s) => s.setScenario);
+
+  // Dev only: ?scenario=heatwave opens the console on that scenario (for screenshots).
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const id = new URLSearchParams(window.location.search).get('scenario');
+    if (id && (SCENARIO_IDS as readonly string[]).includes(id)) setScenario(id as ScenarioId);
+  }, [setScenario]);
   return (
     <div className="min-h-screen bg-mist">
       <a href="#console-main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-chip focus:bg-paper focus:px-3 focus:py-2">

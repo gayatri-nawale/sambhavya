@@ -114,6 +114,8 @@ export interface Scenario {
   thresholds: RiskThresholds;
   defaultLeadH: number;
   threatTitle: string;
+  /** Places labelled on this scenario's maps. */
+  mapPlaces: readonly string[];
   drivers: readonly string[];
   seed: number;
   illustrative: true;
@@ -208,6 +210,7 @@ const cyclone: Scenario = {
   thresholds: { values: [64, 115, 204], label: (v) => `P(>${v} mm/24h)` },
   defaultLeadH: 96,
   threatTitle: 'Severe cyclonic storm',
+  mapPlaces: ['Digha', 'Hatiya', 'Kolkata', 'Sundarbans', 'Paradip', 'Visakhapatnam', 'Sohra'],
   drivers: [
     'Very warm sea surface in the Bay of Bengal',
     'Low vertical wind shear along the path',
@@ -286,6 +289,7 @@ const heatwave: Scenario = {
   thresholds: { values: [46.5, 48.5, 50.5], label: (v) => `P(Tmax>${v} °C)` },
   defaultLeadH: 96,
   threatTitle: 'Heatwave',
+  mapPlaces: ['Jaisalmer', 'Phalodi', 'Bikaner', 'Jodhpur', 'Churu', 'Jaipur', 'Hisar', 'Delhi'],
   drivers: [
     'Persistent upper-level ridge over north-west India',
     'Dry north-westerly winds, clear skies',
@@ -364,6 +368,7 @@ const humidHeat: Scenario = {
   thresholds: { values: [28.5, 30, 31.5], label: (v) => `P(wet-bulb>${v} °C)` },
   defaultLeadH: 96,
   threatTitle: 'Humid heat',
+  mapPlaces: ['Machilipatnam', 'Kakinada', 'Visakhapatnam', 'Srikakulam', 'Gopalpur', 'Puri', 'Bhubaneswar', 'Balasore'],
   drivers: [
     'Moist onshore winds from the Bay of Bengal',
     'Delayed sea breeze and warm nights',

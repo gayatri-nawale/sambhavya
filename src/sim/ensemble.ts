@@ -4,6 +4,7 @@ import {
   bboxAround,
   bboxContains,
   bboxOf,
+  convexHull,
   haversineKm,
   icosphere,
   isLand,
@@ -204,9 +205,11 @@ function generateMembers(scenario: Scenario): MemberTrack[] {
     let nLon = 0;
     for (let h = 0; h <= endH; h += LEAD_STEP_H) {
       // Spread grows with lead time: AR(1) wobble with growing innovations.
-      const sd = isControl ? 0 : 0.015 + 0.0009 * h;
-      nLat = 0.82 * nLat + rng.normal(0, sd);
-      nLon = 0.82 * nLon + rng.normal(0, sd);
+      // Heat cores drift slowly, so their wobble is smoother (more persistent, smaller steps).
+      const sd = isControl ? 0 : isCyclone ? 0.015 + 0.0009 * h : 0.004 + 0.0004 * h;
+      const phi = isCyclone ? 0.82 : 0.95;
+      nLat = phi * nLat + rng.normal(0, sd);
+      nLon = phi * nLon + rng.normal(0, sd);
       const c = controlAt(scenario.controlTrack, Math.min(endH, h * speed));
       const intensity =
         c.intensity * path.offset.intensityFactor(h) * (isCyclone ? strength : 1 + (strength - 1) * 0.7);
@@ -384,8 +387,25 @@ function buildCone(members: readonly MemberTrack[], meanPts: readonly TrackPoint
   });
 }
 
-/** Closed lat/lon ring around the cone (left side out, right side back). */
-export function conePolygon(cone: readonly ConeSlice[]): LatLon[] {
+/**
+ * Closed lat/lon ring around the cone. 'track' follows the path (left side out,
+ * right side back) and suits moving storms; 'envelope' is the outline of all
+ * slices' circles and suits slow-moving heat cores whose path doubles back.
+ */
+export function conePolygon(cone: readonly ConeSlice[], shape: 'track' | 'envelope' = 'track'): LatLon[] {
+  if (shape === 'envelope') {
+    const pts: LatLon[] = [];
+    for (const s of cone) {
+      const cosLat = Math.cos((s.lat * Math.PI) / 180);
+      const r = s.radiusKm / 111.2;
+      for (let k = 0; k < 24; k++) {
+        const t = (k / 24) * Math.PI * 2;
+        pts.push({ lat: s.lat + r * Math.sin(t), lon: s.lon + (r * Math.cos(t)) / cosLat });
+      }
+    }
+    const hull = convexHull(pts);
+    return hull[0] ? [...hull, hull[0]] : hull;
+  }
   const left: LatLon[] = [];
   const right: LatLon[] = [];
   cone.forEach((s, i) => {
