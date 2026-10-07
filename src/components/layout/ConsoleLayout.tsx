@@ -122,7 +122,8 @@ export function ConsoleLayout() {
 
       <div className="lg:pl-[240px]">
         {/* Top bar */}
-        <header className="sticky top-0 z-20 border-b border-line bg-paper">
+        {/* Sticky on desktop only: on phones the wrapped bar would take too much of the screen. */}
+        <header className="z-20 border-b border-line bg-paper lg:sticky lg:top-0">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:px-6">
             <div className="lg:hidden">
               <Wordmark />

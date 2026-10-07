@@ -40,21 +40,23 @@ interface RowTemplate {
   ratio: number;
 }
 
+// Rows for each scenario's own run match the alerts that run produces (src/sim/risk.ts);
+// other rows come from neighbouring runs of the same replay.
 const TEMPLATES: readonly RowTemplate[] = [
-  { scenarioId: 'cyclone', area: 'Digha coast', run: '16 May 2020, 00 UTC', level: 'severe', leadH: 96, tier: 2, ratio: 1.16 },
-  { scenarioId: 'cyclone', area: 'Sagar Island coast', run: '16 May 2020, 00 UTC', level: 'severe', leadH: 96, tier: 2, ratio: 1.08 },
-  { scenarioId: 'cyclone', area: 'Kolkata area', run: '16 May 2020, 12 UTC', level: 'moderate', leadH: 96, tier: 1, ratio: 1.22 },
+  { scenarioId: 'cyclone', area: 'Sagar Island coast', run: '16 May 2020, 00 UTC', level: 'severe', leadH: 96, tier: 2, ratio: 1.16 },
+  { scenarioId: 'cyclone', area: 'Haldia coast', run: '16 May 2020, 00 UTC', level: 'moderate', leadH: 96, tier: 1, ratio: 1.22 },
+  { scenarioId: 'cyclone', area: 'Kolkata area', run: '16 May 2020, 00 UTC', level: 'low', leadH: 96, tier: 0, ratio: 1.25 },
+  { scenarioId: 'cyclone', area: 'Digha coast', run: '16 May 2020, 12 UTC', level: 'severe', leadH: 84, tier: 2, ratio: 1.08 },
   { scenarioId: 'cyclone', area: 'Balasore coast', run: '16 May 2020, 12 UTC', level: 'moderate', leadH: 84, tier: 1, ratio: 0.78 },
-  { scenarioId: 'cyclone', area: 'Sohra area', run: '17 May 2020, 00 UTC', level: 'low', leadH: 108, tier: 0, ratio: 1.31 },
-  { scenarioId: 'cyclone', area: 'Haldia coast', run: '17 May 2020, 00 UTC', level: null, leadH: 72, tier: 1, ratio: 1.12 },
+  { scenarioId: 'cyclone', area: 'Sundarbans area', run: '17 May 2020, 00 UTC', level: null, leadH: 72, tier: 1, ratio: 1.12 },
   { scenarioId: 'heatwave', area: 'Bikaner area', run: '24 May 2024, 00 UTC', level: 'severe', leadH: 108, tier: 2, ratio: 1.01 },
-  { scenarioId: 'heatwave', area: 'Phalodi area', run: '24 May 2024, 00 UTC', level: 'severe', leadH: 120, tier: 2, ratio: 1.02 },
-  { scenarioId: 'heatwave', area: 'Delhi area', run: '24 May 2024, 12 UTC', level: 'low', leadH: 132, tier: 0, ratio: 1.03 },
+  { scenarioId: 'heatwave', area: 'Delhi area', run: '24 May 2024, 00 UTC', level: 'low', leadH: 132, tier: 0, ratio: 1.03 },
+  { scenarioId: 'heatwave', area: 'Phalodi area', run: '24 May 2024, 12 UTC', level: 'severe', leadH: 108, tier: 2, ratio: 1.02 },
   { scenarioId: 'heatwave', area: 'Jaipur area', run: '25 May 2024, 00 UTC', level: 'moderate', leadH: 96, tier: 1, ratio: 0.985 },
   { scenarioId: 'heatwave', area: 'Churu area', run: '25 May 2024, 00 UTC', level: null, leadH: 96, tier: 1, ratio: 1.02 },
   { scenarioId: 'humidHeat', area: 'Srikakulam coast', run: '10 June 2024, 00 UTC', level: 'severe', leadH: 108, tier: 2, ratio: 1.01 },
   { scenarioId: 'humidHeat', area: 'Gopalpur coast', run: '10 June 2024, 00 UTC', level: 'moderate', leadH: 108, tier: 1, ratio: 1.02 },
-  { scenarioId: 'humidHeat', area: 'Visakhapatnam coast', run: '10 June 2024, 12 UTC', level: 'low', leadH: 84, tier: 0, ratio: 1.02 },
+  { scenarioId: 'humidHeat', area: 'Visakhapatnam coast', run: '10 June 2024, 00 UTC', level: 'low', leadH: 84, tier: 0, ratio: 1.02 },
   { scenarioId: 'humidHeat', area: 'Kakinada coast', run: '11 June 2024, 00 UTC', level: 'moderate', leadH: 72, tier: 1, ratio: 0.97 },
 ];
 

@@ -169,7 +169,7 @@ export default function ForecastRun() {
         </Panel>
       </div>
 
-      <Panel title="Log" description={`Times are simulated processing time (UTC) for ${SCENARIOS[scenarioId].run.label}`} bleed>
+      <Panel title="Log" description={`Times are simulated processing time (UTC) for ${SCENARIOS[scenarioId].run.label}`} replay bleed>
         <LogStream label="Forecast run log" lines={lines} emptyText="No log lines yet. Press Run forecast." className="h-56" />
       </Panel>
     </div>

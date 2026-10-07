@@ -115,11 +115,11 @@ export function ToggleGroup<T extends string | number>({ label, options, value, 
     }
   };
   return (
-    <div className={`flex items-center gap-2 ${className ?? ''}`}>
+    <div className={`flex flex-wrap items-center gap-2 ${className ?? ''}`}>
       <span id={labelId} className={showLabel ? 'text-small' : 'sr-only'}>
         {label}
       </span>
-      <div role="radiogroup" aria-labelledby={labelId} className="inline-flex rounded-chip border border-line bg-paper p-0.5" onKeyDown={onKeyDown}>
+      <div role="radiogroup" aria-labelledby={labelId} className="inline-flex max-w-full flex-wrap rounded-chip border border-line bg-paper p-0.5" onKeyDown={onKeyDown}>
         {options.map((o, i) => {
           const on = o.value === value;
           return (
@@ -133,7 +133,7 @@ export function ToggleGroup<T extends string | number>({ label, options, value, 
               aria-checked={on}
               tabIndex={on ? 0 : -1}
               onClick={() => onChange(o.value)}
-              className={`h-7 min-w-9 rounded-[3px] px-2.5 text-small font-medium tabular-nums ${on ? 'bg-ink text-paper' : 'text-ink hover:bg-mist'}`}
+              className={`h-7 min-w-9 whitespace-nowrap rounded-[3px] px-2.5 text-small font-medium tabular-nums ${on ? 'bg-ink text-paper' : 'text-ink hover:bg-mist'}`}
             >
               {o.label}
             </button>

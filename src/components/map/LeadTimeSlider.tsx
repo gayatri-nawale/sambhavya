@@ -61,12 +61,12 @@ export function LeadTimeSlider({
         type="button"
         onClick={togglePlay}
         aria-label={playing ? 'Pause lead-time playback' : 'Play lead-time playback'}
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-[4px] border border-[#1F8A84] bg-[#1F8A84] text-white hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#14213D]"
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-chip border border-teal bg-teal text-paper hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
       >
         {playing ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
       </button>
       <div className="min-w-0 flex-1">
-        <div className="mb-1 flex flex-wrap items-baseline justify-between gap-x-3 text-[14px] text-[#14213D] tabular-nums">
+        <div className="mb-1 flex flex-wrap items-baseline justify-between gap-x-3 text-small text-ink tabular-nums">
           <label htmlFor={id} className="font-semibold">
             Lead time T+{value} h
           </label>
@@ -84,7 +84,7 @@ export function LeadTimeSlider({
           className="lead-slider w-full"
           style={{ background: `linear-gradient(to right, #1F8A84 ${pct}%, #C9D3DE ${pct}%)` }}
         />
-        <div className="relative mt-1 h-4 text-[12px] text-[#14213D] tabular-nums" aria-hidden="true">
+        <div className="relative mt-1 h-4 text-small text-ink tabular-nums" aria-hidden="true">
           {days.map((h) => (
             <span
               key={h}

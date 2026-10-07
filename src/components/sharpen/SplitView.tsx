@@ -115,8 +115,8 @@ export function SplitView({ left, right, colormap, label, rightNotice }: SplitVi
         </div>
         <CoastOverlay field={right.field} />
 
-        <div className="pointer-events-none absolute left-3 top-3 rounded-chip bg-paper/95 px-2 py-0.5 text-small font-semibold">{left.label}</div>
-        <div className="pointer-events-none absolute right-3 top-3 rounded-chip bg-paper/95 px-2 py-0.5 text-small font-semibold">{right.label}</div>
+        <div className="pointer-events-none absolute left-3 top-3 max-w-[44%] truncate rounded-chip bg-paper/95 px-2 py-0.5 text-small font-semibold">{left.label}</div>
+        <div className="pointer-events-none absolute right-3 top-3 max-w-[44%] truncate rounded-chip bg-paper/95 px-2 py-0.5 text-small font-semibold">{right.label}</div>
         {left.footer && <div className="pointer-events-none absolute bottom-3 left-3 rounded-chip bg-paper/95 px-2 py-0.5 text-small tabular-nums">{left.footer}</div>}
         {right.footer && <div className="pointer-events-none absolute bottom-3 right-3 rounded-chip bg-paper/95 px-2 py-0.5 text-small tabular-nums">{right.footer}</div>}
 

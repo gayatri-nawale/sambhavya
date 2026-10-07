@@ -8,12 +8,13 @@ import NotFound from '../pages/NotFound';
 
 // The console pulls in the simulation engine and world map, so it loads on demand.
 const ConsoleLayout = lazy(() => import('../components/layout/ConsoleLayout').then((m) => ({ default: m.ConsoleLayout })));
-const ConsolePlaceholder = lazy(() => import('../pages/console/ConsolePlaceholder'));
 const ForecastRun = lazy(() => import('../pages/console/ForecastRun'));
 const ThreatTracker = lazy(() => import('../pages/console/ThreatTracker'));
 const Sharpen = lazy(() => import('../pages/console/Sharpen'));
 const RiskReview = lazy(() => import('../pages/console/RiskReview'));
 const Calibration = lazy(() => import('../pages/console/Calibration'));
+const Verification = lazy(() => import('../pages/console/Verification'));
+const Sources = lazy(() => import('../pages/console/Sources'));
 
 // Dev-only pages are dropped from production builds.
 const SimCheckPage = import.meta.env.DEV ? lazy(() => import('../pages/dev/SimCheckPage')) : null;
@@ -50,8 +51,8 @@ export function App() {
             <Route path="sharpen" element={<Sharpen />} />
             <Route path="calibration" element={<Calibration />} />
             <Route path="alerts" element={<RiskReview />} />
-            <Route path="verify" element={<ConsolePlaceholder id="verify" />} />
-            <Route path="sources" element={<ConsolePlaceholder id="sources" />} />
+            <Route path="verify" element={<Verification />} />
+            <Route path="sources" element={<Sources />} />
           </Route>
           {SimCheckPage && <Route path="_sim" element={<SimCheckPage />} />}
           {KitPage && <Route path="_kit" element={<KitPage />} />}

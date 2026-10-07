@@ -14,6 +14,7 @@ export * from './risk';
 export * from './cap';
 export * from './pipeline';
 export * from './verify';
+export * from './provenance';
 export { fingerprint, percentile, maxOf, meanOf } from './util';
 
 import { clearEnsembleCache } from './ensemble';

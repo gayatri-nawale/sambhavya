@@ -572,7 +572,7 @@ export function MapCanvas(props: MapCanvasProps) {
   return (
     <div
       ref={wrapRef}
-      className={`relative overflow-hidden select-none touch-none outline-none focus-visible:ring-2 focus-visible:ring-[#1F8A84] focus-visible:ring-inset ${interactive ? 'cursor-grab active:cursor-grabbing' : ''} ${className ?? ''}`}
+      className={`relative overflow-hidden select-none touch-none outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-inset ${interactive ? 'cursor-grab active:cursor-grabbing' : ''} ${className ?? ''}`}
       role="region"
       aria-roledescription="map"
       aria-label={label}
@@ -646,7 +646,7 @@ export function MapCanvas(props: MapCanvasProps) {
               aria-label={l}
               title={l}
               onClick={act}
-              className="grid h-8 w-8 place-items-center rounded-[4px] border border-[#C9D3DE] bg-white text-[#14213D] hover:bg-[#EEF2F6] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#1F8A84]"
+              className="grid h-8 w-8 place-items-center rounded-chip border border-line bg-paper text-ink hover:bg-mist focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-teal"
             >
               <Icon size={16} aria-hidden="true" />
             </button>
