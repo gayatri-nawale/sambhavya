@@ -65,6 +65,86 @@ function effective(alert: Alert, review: AlertReview) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Detail wording per audience                                          */
+/* ------------------------------------------------------------------ */
+
+/** Each zone is a 4 × 4 block of 5 km cells, about 20 km across. */
+const ZONE_AREA_KM2 = 400;
+
+function Fact({ label, wide, children }: { label: string; wide?: boolean; children: React.ReactNode }) {
+  return (
+    <div className={wide ? 'sm:col-span-2' : ''}>
+      <dt className="text-small">{label}</dt>
+      <dd className="tabular-nums">{children}</dd>
+    </div>
+  );
+}
+
+/** Operational wording: thresholds, lead times, zones and the core point. */
+function ResponseDetail({ alert, from, to }: { alert: Alert; from: string; to: string }) {
+  return (
+    <dl className="mt-4 grid gap-x-6 gap-y-3 text-body sm:grid-cols-2">
+      <Fact label="Probability (calibrated)">
+        {alert.thresholdLabel} <strong>{alert.probability.toFixed(2)}</strong>
+        <span className="block text-small">Raw member fraction {alert.rawProbability.toFixed(2)}</span>
+      </Fact>
+      <Fact label="Lead time and window">
+        T+{alert.leadH} to T+{alert.validToH} h
+        <span className="block text-small">
+          {from} to {to}
+        </span>
+      </Fact>
+      <Fact label="Area">
+        {alert.zoneIds.length} zones of 5 km cells around {alert.areaName}
+        <span className="block text-small">
+          Core point {alert.core.lat.toFixed(2)}°N {alert.core.lon.toFixed(2)}°E
+        </span>
+      </Fact>
+      <Fact label="Member agreement">
+        {alert.agreement.count} of {alert.agreement.total} members exceed the threshold in the core zone
+      </Fact>
+      <Fact label="Most likely scenario">{alert.scenarioPath}</Fact>
+      <Fact label="Drivers">{alert.drivers.join(' · ')}</Fact>
+      <Fact label="For disaster response" wide>
+        {alert.advice.response}
+      </Fact>
+    </dl>
+  );
+}
+
+/** Plain wording for farm advisories: chance in tenths, dates, area and what to do. */
+function AgrometDetail({ alert, from, to }: { alert: Alert; from: string; to: string }) {
+  const kind = SCENARIOS[alert.scenarioId].fieldKind;
+  const what =
+    kind === 'rain'
+      ? `more than ${alert.thresholdValue} mm of rain in a day`
+      : kind === 'temperature'
+        ? `daytime temperatures above ${alert.thresholdValue} °C`
+        : `humid heat above ${alert.thresholdValue} °C wet-bulb`;
+  const tenths = Math.max(1, Math.round(alert.probability * 10));
+  const area = (alert.zoneIds.length * ZONE_AREA_KM2).toLocaleString('en-IN');
+  return (
+    <dl className="mt-4 grid gap-x-6 gap-y-3 text-body sm:grid-cols-2">
+      <Fact label="What to expect">
+        About {tenths} in 10 chance of {what}
+      </Fact>
+      <Fact label="When">
+        {from} to {to}
+      </Fact>
+      <Fact label="Where">
+        Around {alert.areaName}, about {area} km²
+      </Fact>
+      <Fact label="How sure the forecast is">
+        {alert.agreement.count} of {alert.agreement.total} ensemble members show it
+      </Fact>
+      <Fact label="Advice for farmers" wide>
+        {alert.advice.agromet}
+      </Fact>
+    </dl>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Edit form                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -130,13 +210,14 @@ export default function RiskReview() {
   const alerts = getAlerts(scenarioId);
   const alert = alerts.find((a) => a.id === sel.alertId) ?? alerts[0];
 
-  // Dev only: ?review=approve approves the first alert; ?lang=hi shows the Hindi SMS (for screenshots).
+  // Dev only: ?review=approve approves the first alert; ?lang=hi and ?audience=agromet preset the views (for screenshots).
   useEffect(() => {
     if (!import.meta.env.DEV) return;
     const q = new URLSearchParams(window.location.search);
     const first = getAlerts(scenarioId)[0];
     if (q.get('review') === 'approve' && first) approveAlert(first.id, replayNow(scenarioId));
     if (q.get('lang') === 'hi') select({ language: 'hi' });
+    if (q.get('audience') === 'agromet') select({ audience: 'agromet' });
   }, [scenarioId, approveAlert, select]);
 
   // Leave edit mode when another alert or scenario is selected.
@@ -281,42 +362,11 @@ export default function RiskReview() {
               </div>
             ) : (
               <>
-                <dl className="mt-4 grid gap-x-6 gap-y-3 text-body sm:grid-cols-2">
-                  <div>
-                    <dt className="text-small">Probability (calibrated)</dt>
-                    <dd className="tabular-nums">
-                      {alert.thresholdLabel} <strong>{alert.probability.toFixed(2)}</strong>
-                      <span className="block text-small">Raw member fraction {alert.rawProbability.toFixed(2)}</span>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-small">Lead time and window</dt>
-                    <dd className="tabular-nums">
-                      T+{alert.leadH} to T+{alert.validToH} h
-                      <span className="block text-small">
-                        {from} to {to}
-                      </span>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-small">Member agreement</dt>
-                    <dd className="tabular-nums">
-                      {alert.agreement.count} of {alert.agreement.total} members exceed the threshold in the core zone
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-small">Scenario</dt>
-                    <dd>{alert.scenarioPath}</dd>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <dt className="text-small">Drivers</dt>
-                    <dd>{alert.drivers.join(' · ')}</dd>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <dt className="text-small">{sel.audience === 'response' ? 'For disaster response' : 'Agromet advisory'}</dt>
-                    <dd>{sel.audience === 'response' ? alert.advice.response : alert.advice.agromet}</dd>
-                  </div>
-                </dl>
+                {sel.audience === 'response' ? (
+                  <ResponseDetail alert={alert} from={from} to={to} />
+                ) : (
+                  <AgrometDetail alert={alert} from={from} to={to} />
+                )}
                 <div className="mt-5 flex flex-wrap gap-2 border-t border-line pt-4">
                   <Button onClick={() => approveAlert(alert.id, replayNow(scenarioId))} disabled={review.status === 'approved'}>
                     {review.status === 'approved' ? 'Approved' : 'Approve'}
