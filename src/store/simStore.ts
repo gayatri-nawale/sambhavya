@@ -203,8 +203,13 @@ export const useSimStore = create<SimState>()((set, get) => {
         delete next.approvedAt;
         return { reviews: { ...s.reviews, [id]: next } };
       }),
+    // An edited alert goes back to the queue: any earlier approval no longer applies.
     editAlert: (id, patch) =>
-      set((s) => ({ reviews: { ...s.reviews, [id]: { status: 'pending', ...s.reviews[id], ...patch } } })),
+      set((s) => {
+        const next: AlertReview = { ...s.reviews[id], ...patch, status: 'pending' };
+        delete next.approvedAt;
+        return { reviews: { ...s.reviews, [id]: next } };
+      }),
     resetReviews: () => set({ reviews: initialReviews() }),
 
     startTour: () => set({ tour: { active: true, stage: 0 } }),

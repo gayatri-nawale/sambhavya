@@ -12,6 +12,7 @@ const ConsolePlaceholder = lazy(() => import('../pages/console/ConsolePlaceholde
 const ForecastRun = lazy(() => import('../pages/console/ForecastRun'));
 const ThreatTracker = lazy(() => import('../pages/console/ThreatTracker'));
 const Sharpen = lazy(() => import('../pages/console/Sharpen'));
+const RiskReview = lazy(() => import('../pages/console/RiskReview'));
 
 // Dev-only pages are dropped from production builds.
 const SimCheckPage = import.meta.env.DEV ? lazy(() => import('../pages/dev/SimCheckPage')) : null;
@@ -47,7 +48,7 @@ export function App() {
             <Route path="tracker" element={<ThreatTracker />} />
             <Route path="sharpen" element={<Sharpen />} />
             <Route path="calibration" element={<ConsolePlaceholder id="calibration" />} />
-            <Route path="alerts" element={<ConsolePlaceholder id="alerts" />} />
+            <Route path="alerts" element={<RiskReview />} />
             <Route path="verify" element={<ConsolePlaceholder id="verify" />} />
             <Route path="sources" element={<ConsolePlaceholder id="sources" />} />
           </Route>
